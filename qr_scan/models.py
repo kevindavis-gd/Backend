@@ -8,3 +8,4 @@ class CheckIn(models.Model):
     scanTime = models.TimeField(auto_now=True)
     scanDate = models.DateField(auto_now=True)
 
+

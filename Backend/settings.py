@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'api',
     'users',
     'qr_scan',
+    'locations',
     'rest_framework',
     'rest_framework.authtoken',
 

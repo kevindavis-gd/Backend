@@ -23,6 +23,8 @@ from rest_framework.authtoken import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path('scan/', include(router.urls)),
+    #path('scan/', include(router.urls)),
+    #path('scan/', include(router.urls)),
+    #path('location/', include(router.urls)),
     url(r'^users/', include('users.urls')),
 ]
