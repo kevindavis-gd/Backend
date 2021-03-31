@@ -13,6 +13,8 @@ from django.contrib.auth.models import User
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework import generics
 
+from datetime import datetime
+
 
 class CheckInViewset(viewsets.ModelViewSet):
     queryset = models.CheckIn.objects.all()
@@ -24,6 +26,11 @@ class CheckInViewset(viewsets.ModelViewSet):
         serializer =self.get_serializer_class()(newest)
         print(request.user)
         return Response(serializer.data)
+        
+        now = datetime.now()
+        current_time = now.strftime("%H:%M:%S")
+
+
 
 
     @action(methods=['get'], detail=False)

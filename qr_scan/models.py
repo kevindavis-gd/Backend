@@ -1,11 +1,16 @@
 from django.db import models
+from locations.models import Building
+
 
 # Inherits from the default model class and sets the requirements for the database columns
 class CheckIn(models.Model):
     mustangsID = models.CharField(max_length=100)
-    buildingID = models.CharField(max_length=100)
-    checkIn = models.CharField(max_length=100)
-    scanTime = models.TimeField(auto_now=True)
+    checkInTime = models.CharField(max_length=100)
+    checkOutTime = models.CharField(max_length=100)
     scanDate = models.DateField(auto_now=True)
+    room = models.ForeignKey('locations.Room', default=None, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.mustangsID
 
 
