@@ -30,8 +30,8 @@ class Room(models.Model):
     roomName = models.CharField(max_length=100, unique= True)
     roomCapacity = models.IntegerField()
     building = models.ForeignKey('Building', default=None, on_delete=models.CASCADE)
-    def __str__(self):
-        return self.roomName
+    #def __str__(self):
+        #return self.roomName
 
 
 class Equipment(models.Model):

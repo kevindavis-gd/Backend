@@ -7,10 +7,10 @@ class CheckIn(models.Model):
     mustangsID = models.CharField(max_length=100)
     checkInTime = models.CharField(max_length=100)
     checkOutTime = models.CharField(max_length=100)
-    scanDate = models.DateField(auto_now=True)
+    scanDate = models.CharField(max_length=100)
     room = models.ForeignKey('locations.Room', default=None, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.mustangsID
+    #def __str__(self):
+    #    return self.mustangsID
 
 
