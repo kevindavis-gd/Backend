@@ -97,8 +97,14 @@ class CheckInViewset(viewsets.ModelViewSet):
     def getcheckins(self, request):
         #get the username by looking at the token sent from the front end
         username = request.user.get_username()
-        #filter out the data by the username/mustangsID
-        queryset = models.CheckIn.objects.filter(mustangsID__exact=username)
+        staff = self.request.user.is_staff
+        if staff:
+            print("staff Access")
+            queryset = models.CheckIn.objects.all()
+        else:
+            print("non-staff Access")
+            #filter out the data by the username/mustangsID
+            queryset = models.CheckIn.objects.filter(mustangsID__exact=username)
         serializer_class = serializer.getCheckinsForSerializer(queryset, many = True)
         return Response(serializer_class.data)
 
@@ -130,3 +136,32 @@ class CheckInViewset(viewsets.ModelViewSet):
                 HourList.append(queryset)
             listOfHours.append(HourList)
         return Response(listOfHours)
+
+
+
+
+
+    @action(methods=['post'], detail=False)
+    def getexposedpeople(self, request):
+        import datetime
+        #get the username by looking at the token sent from the front end
+        username = request.data['username']
+        finalQueryset = models.CheckIn.objects.none()
+        print(username)
+        staff = self.request.user.is_staff
+        if staff:
+            print("staff Access")
+            queryset1 = models.CheckIn.objects.filter(mustangsID__exact=username)
+            for x in queryset1:
+                studentScanDate = x.scanDate
+                if queryset1 != None:
+                    queryset2 =  queryset1.filter(scanDate__exact = studentScanDate).filter(checkInTime__range=[x.checkInTime, x.checkOutTime])
+                    if queryset2 != None:
+                        queryset3 = queryset1.filter(scanDate__exact = studentScanDate).filter(checkOutTime__range=[x.checkInTime, x.checkOutTime])
+                        
+            print("non-staff Access")
+            #filter out the data by the username/mustangsID
+            serializer_class = serializer.getCheckinsForSerializer(queryset3, many = True)
+            return Response(serializer_class.data)
+        return Response("you are not staff")
+        
