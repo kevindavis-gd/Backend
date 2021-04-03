@@ -15,7 +15,7 @@ class CheckOutSerializer(serializers.ModelSerializer):
         fields = ('')
         #permission_classes = [IsAuthenticated,]
 
-class getCheckinsFor(serializers.ModelSerializer):
+class getCheckinsForSerializer(serializers.ModelSerializer):
     class Meta:
         model = CheckIn
         fields = ('mustangsID','room','checkInTime','scanDate')

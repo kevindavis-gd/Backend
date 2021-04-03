@@ -15,6 +15,8 @@ from rest_framework import generics
 
 from datetime import datetime
 from datetime import date
+from datetime import datetime, timedelta
+import re
 
 
 class CheckInViewset(viewsets.ModelViewSet):
@@ -97,7 +99,34 @@ class CheckInViewset(viewsets.ModelViewSet):
         username = request.user.get_username()
         #filter out the data by the username/mustangsID
         queryset = models.CheckIn.objects.filter(mustangsID__exact=username)
-        serializer_class = serializer.CheckInSerializer(queryset, many = True)
+        serializer_class = serializer.getCheckinsForSerializer(queryset, many = True)
         return Response(serializer_class.data)
 
-   
+
+    @action(methods=['get'], detail=False)
+    def getDateStatus(self, request):
+        now = datetime.now() - timedelta(days = 1)
+        listOfDays = []
+
+        for x in range(0,14):
+            now = datetime.now() - timedelta(days = x)
+            current_date = now.strftime("%Y-%m-%d")
+            queryset = models.CheckIn.objects.filter(scanDate__exact = current_date).count()
+            listOfDays.append(queryset)
+        return Response(listOfDays)
+
+
+    @action(methods=['get'], detail=False)
+    def getHourStatus(self, request):
+        listOfHours = []
+
+        for x in range(0,14):
+            current_date = datetime.now() - timedelta(days = x)
+            current_date_string = current_date.strftime("%Y-%m-%d")
+            HourList = []
+            for y in range(0,23):
+                queryset = models.CheckIn.objects.filter(scanDate__exact = current_date_string).filter(checkInTime__regex =r'^' + str(y) + '.').count()
+                print(queryset)
+                HourList.append(queryset)
+            listOfHours.append(HourList)
+        return Response(listOfHours)
