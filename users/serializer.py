@@ -4,27 +4,17 @@ from django.contrib.auth.models import User
 
 #User model already exists within Django, we just created the serializer
 class UserSerializer(serializers.ModelSerializer):
-    first_name = serializers.CharField(
-            max_length=100
-            )
-    last_name = serializers.CharField(
-            max_length=100
-            )
-    email = serializers.EmailField(
-            required=True,
-            validators=[UniqueValidator(queryset=User.objects.all())]
-            )
-    username = serializers.CharField(
-            required=True,
-            max_length=32,
-            validators=[UniqueValidator(queryset=User.objects.all())]
-            )
+    first_name = serializers.CharField(max_length=100)
+    last_name = serializers.CharField(max_length=100)
+    #the email field is required and it needs to be unique for every user in the queryset
+    email = serializers.EmailField(required=True,validators=[UniqueValidator(queryset=User.objects.all())])
+    username = serializers.CharField(required=True,max_length=32,validators=[UniqueValidator(queryset=User.objects.all())])
     password1 = serializers.CharField(min_length=8, write_only=True)
     password2 = serializers.CharField(min_length=8, write_only=True)
 
+    #function to create a user
     def create(self, validated_data):
         user = User.objects.create_user(validated_data['username'],email = validated_data['email'],password=validated_data['password1'],first_name = validated_data['first_name'],last_name = validated_data['last_name'])
-        
         return user
 
     class Meta:

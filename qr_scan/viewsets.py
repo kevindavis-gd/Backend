@@ -23,6 +23,7 @@ class CheckInViewset(viewsets.ModelViewSet):
         serializer =self.get_serializer_class()(newest)
         print(request.user)
         return Response(serializer.data)
+        
     #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     #/////////////////////////////////////////////ScanQR//////////////////////////////////////////////////////////////
     #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -138,7 +139,7 @@ class CheckInViewset(viewsets.ModelViewSet):
     # and for each of the 14 loops, it loops 24 times for each hour.
     @action(methods=['get'], detail=False)
     def getHourStatus(self, request):
-        listOfHours = []
+        listOfHourLists = []
 
         for x in range(0,14):
             #get the current date minus x number of days
@@ -151,13 +152,12 @@ class CheckInViewset(viewsets.ModelViewSet):
             for y in range(0,23):
                 # return the count of all the checkin objects that has the exact current_date and a checkin_time that starts with y (24 hour clock)
                 queryset = models.CheckIn.objects.filter(scanDate__exact = current_date_string).filter(checkInTime__regex =r'^' + str(y) + '.').count()
-                print(queryset)
                 # add the information to the hour list
                 HourList.append(queryset)
 
             # add the hour list to the listOfHours list creating a list of lists
-            listOfHours.append(HourList)
-        return Response(listOfHours)
+            listOfHourLists.append(HourList)
+        return Response(listOfHourLists)
         
 
     #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -34,10 +34,10 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
-    'api',
+    #'api',
     'users',
     'qr_scan',
-    'status',
+    #'status',
     'locations',
     'rest_framework',
     'rest_framework.authtoken',
