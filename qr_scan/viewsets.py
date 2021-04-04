@@ -35,18 +35,30 @@ class CheckInViewset(viewsets.ModelViewSet):
         current_time = now.strftime("%H:%M:%S")
         #cinvert the date into a string
         current_date = now.strftime("%Y-%m-%d")
-        #get the username from the request sent
-        username = request.user.get_username()
-
-       
+        #get the username from the token used
+        #username = request.user.get_username()
+        username = request.data['mustangsID']
         #get the last checkin created by the user and store into a queryset
-        previous_queryset = models.CheckIn.objects.filter(mustangsID__exact=username).last()
-
+        previous_queryset = models.CheckIn.objects.filter(mustangsID__exact = username).last()
         #store the equipmentID/roomID of the current scan
-        #####################################################
-        #this needs to change from roomID to equipmentID
-        #####################################################
         current_Equipment_ID = request.data['room'] ####################Change
+
+        print(previous_queryset)
+        
+
+        
+        #if the user never checked in before just check them in
+        #dont try to get previous checkins
+        if previous_queryset == None:
+            print('First time checking in')
+            #store the current data received into a queryset
+            inner_serializer = serializer.CheckInSerializer(data=request.data)
+            inner_serializer.is_valid(self)
+            #save the new checkin with the current checkin time and current scanDate but set the CheckOutTime to NONE
+            inner_serializer.save(checkInTime= current_time,scanDate = current_date, checkOutTime = "NONE")
+            return Response(inner_serializer.data)
+
+        
         #store the equipmentID of the previous checkin
         previous_Equipment_ID = previous_queryset.room.roomID ####################Change
         #store the check out time of the previous checkin
@@ -71,7 +83,7 @@ class CheckInViewset(viewsets.ModelViewSet):
         #we need to checkout the previous checkin and create a new checkin
 
         elif (previous_checkout_time  == "NONE" and previous_Equipment_ID != current_Equipment_ID) or (previous_checkout_time  == "NONE" and previous_checkin_date != current_date):
-            print('differentID or different date')
+            print('different equipment ID or different checkin date')
             inner_serializer = serializer.CheckInSerializer(instance = previous_queryset, data=request.data)
             inner_serializer.is_valid(self)
             inner_serializer.save(checkOutTime = current_time)
@@ -82,12 +94,12 @@ class CheckInViewset(viewsets.ModelViewSet):
             return Response(inner_serializer.data)
 
         else:
-            print('new checkin')
+            print('checkin')
             #store the current data received into a queryset
             inner_serializer = serializer.CheckInSerializer(data=request.data)
             inner_serializer.is_valid(self)
             #save the new checkin with the current checkin time and current scanDate but set the CheckOutTime to NONE
-            inner_serializer.save(checkInTime= current_time,scanDate = current_date, checkOutTime = "NONE")
+            inner_serializer.save( checkInTime= current_time,scanDate = current_date, checkOutTime = "NONE")
             return Response(inner_serializer.data)
 
     #/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
