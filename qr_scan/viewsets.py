@@ -33,7 +33,7 @@ class CheckInViewset(viewsets.ModelViewSet):
         now = datetime.now()
         #convert the time into a string
         current_time = now.strftime("%H:%M:%S")
-        #cinvert the date into a string
+        #convert the date into a string
         current_date = now.strftime("%Y-%m-%d")
         #get the username from the token used
         #username = request.user.get_username()
@@ -44,6 +44,7 @@ class CheckInViewset(viewsets.ModelViewSet):
         current_Equipment_ID = request.data['room'] ####################Change
 
         print(previous_queryset)
+        print(username)
         
 
         
