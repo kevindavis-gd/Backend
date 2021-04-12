@@ -61,7 +61,8 @@ class CheckInViewset(viewsets.ModelViewSet):
 
         
         #store the equipmentID of the previous checkin
-        previous_Equipment_ID = previous_queryset.room.roomID ####################Change
+        #previous_Equipment_ID = previous_queryset.room.roomID ####################Change
+        previous_Equipment_ID = str(previous_queryset.room.id) ####################Change
         #store the check out time of the previous checkin
         previous_checkout_time = previous_queryset.checkOutTime
         #store the scan date of the previous checkin
@@ -85,6 +86,9 @@ class CheckInViewset(viewsets.ModelViewSet):
 
         elif (previous_checkout_time  == "NONE" and previous_Equipment_ID != current_Equipment_ID) or (previous_checkout_time  == "NONE" and previous_checkin_date != current_date):
             print('different equipment ID or different checkin date')
+            print (previous_Equipment_ID == current_Equipment_ID)
+            print(previous_Equipment_ID)
+            print(current_Equipment_ID)
             inner_serializer = serializer.CheckInSerializer(instance = previous_queryset, data=request.data)
             inner_serializer.is_valid(self)
             inner_serializer.save(checkOutTime = current_time)
