@@ -41,7 +41,7 @@ class CheckInViewset(viewsets.ModelViewSet):
         #get the last checkin created by the user and store into a queryset
         previous_queryset = models.CheckIn.objects.filter(mustangsID__exact = username).last()
         #store the equipmentID/roomID of the current scan
-        current_Equipment_ID = request.data['room'] ####################Change
+        current_Equipment_ID = request.data['equipment'] ####################Change
 
         print(previous_queryset)
         print(username)
@@ -62,7 +62,7 @@ class CheckInViewset(viewsets.ModelViewSet):
         
         #store the equipmentID of the previous checkin
         #previous_Equipment_ID = previous_queryset.room.roomID ####################Change
-        previous_Equipment_ID = str(previous_queryset.room.id) ####################Change
+        previous_Equipment_ID = str(previous_queryset.equipment.equipmentID) ####################Change
         #store the check out time of the previous checkin
         previous_checkout_time = previous_queryset.checkOutTime
         #store the scan date of the previous checkin

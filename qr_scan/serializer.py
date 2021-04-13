@@ -9,7 +9,7 @@ from .models import CheckIn
 class CheckInSerializer(serializers.ModelSerializer):
     class Meta:
         model = CheckIn
-        fields = ('mustangsID','room')
+        fields = ('mustangsID','equipment')
         #permission_classes = [IsAuthenticated,]
 
 #//////////////////////////////////////////////////////////////////////////
@@ -18,5 +18,5 @@ class CheckInSerializer(serializers.ModelSerializer):
 class getCheckinsForSerializer(serializers.ModelSerializer):
     class Meta:
         model = CheckIn
-        fields = ('mustangsID','room','checkInTime','scanDate')
+        fields = ('mustangsID','equipment','checkInTime','scanDate')
         #permission_classes = [IsAuthenticated,]

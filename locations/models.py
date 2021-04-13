@@ -35,7 +35,7 @@ class Building(models.Model):
 #//////////////////////////////////////////////////////////////////////////
 
 class Room(models.Model):
-    roomID = models.CharField(max_length=100, unique= True)
+    roomID = models.CharField(primary_key = True, max_length=100, unique= True)
     roomName = models.CharField(max_length=100, unique= True)
     roomCapacity = models.IntegerField()
     building = models.ForeignKey('Building', default=None, on_delete=models.CASCADE)
@@ -47,7 +47,7 @@ class Room(models.Model):
 #//////////////////////////////////////////////////////////////////////////
 
 class Equipment(models.Model):
-    equipmentID = models.CharField(max_length=100)
+    equipmentID = models.CharField(primary_key = True, max_length=100)
     equipmentName = models.CharField(max_length=100)
     room = models.ForeignKey('Room', default=None, on_delete=models.CASCADE)
 
